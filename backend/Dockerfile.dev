@@ -1,0 +1,19 @@
+FROM maven:3.9.9-eclipse-temurin-17
+
+WORKDIR /app
+
+# Copy dependency files
+COPY pom.xml .
+
+# Download dependencies
+RUN mvn dependency:go-offline -B
+
+# Note: src/ will be mounted as a volume in dev mode
+# This allows hot reload without rebuilding the container
+
+# Expose ports
+EXPOSE 8080 5005
+
+# Run with Spring Boot DevTools for hot reload
+# -Dspring-boot.run.jvmArguments enables remote debugging
+CMD ["mvn", "spring-boot:run", "-Dspring-boot.run.jvmArguments=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005"]

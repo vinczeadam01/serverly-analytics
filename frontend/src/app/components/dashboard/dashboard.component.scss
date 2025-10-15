@@ -1,0 +1,103 @@
+.dashboard-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 2rem;
+}
+
+.dashboard-card {
+  max-width: 800px;
+  margin: 0 auto;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 2rem;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+
+    h1 {
+      margin: 0;
+      font-size: 2rem;
+    }
+
+    .logout-btn {
+      padding: 0.5rem 1.5rem;
+      background: white;
+      color: #667eea;
+      border: none;
+      border-radius: 5px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity 0.3s;
+
+      &:hover {
+        opacity: 0.9;
+      }
+    }
+  }
+
+  .content {
+    padding: 2rem;
+
+    .welcome-section {
+      margin-bottom: 2rem;
+
+      h2 {
+        color: #333;
+        margin-bottom: 0.5rem;
+      }
+
+      p {
+        color: #666;
+        font-size: 1.1rem;
+      }
+    }
+
+    .info-section {
+      background: #f8f9fa;
+      padding: 1.5rem;
+      border-radius: 8px;
+
+      h3 {
+        color: #333;
+        margin-bottom: 1rem;
+      }
+
+      .status-item {
+        display: flex;
+        justify-content: space-between;
+        padding: 0.75rem 0;
+        border-bottom: 1px solid #e0e0e0;
+
+        &:last-child {
+          border-bottom: none;
+        }
+
+        .status-label {
+          font-weight: 500;
+          color: #555;
+        }
+
+        .status-value {
+          font-weight: 600;
+
+          &.success {
+            color: #27ae60;
+          }
+        }
+      }
+    }
+  }
+
+  .loading {
+    padding: 3rem;
+    text-align: center;
+    color: #666;
+    font-size: 1.2rem;
+  }
+}

@@ -1,0 +1,31 @@
+services:
+  backend:
+    build:
+      dockerfile: Dockerfile.dev
+    ports:
+      - "5005:5005"
+    volumes:
+      - ./backend/src:/app/src:ro
+      - ./backend/pom.xml:/app/pom.xml:ro
+      - maven-cache:/root/.m2
+
+  frontend:
+    build:
+      dockerfile: Dockerfile.dev
+    volumes:
+      - ./frontend/src:/app/src:rw
+      - ./frontend/angular.json:/app/angular.json:ro
+      - ./frontend/tsconfig.json:/app/tsconfig.json:ro
+      - ./frontend/tsconfig.app.json:/app/tsconfig.app.json:ro
+      - ./frontend/package.json:/app/package.json:ro
+      - node-modules:/app/node_modules
+    healthcheck:
+      test: ["CMD-SHELL", "wget --quiet --tries=1 --spider http://localhost:4200 || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+volumes:
+  maven-cache:
+  node-modules:

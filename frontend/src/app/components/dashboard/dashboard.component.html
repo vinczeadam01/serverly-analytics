@@ -1,0 +1,31 @@
+<div class="dashboard-container">
+  <div class="dashboard-card">
+    <div class="header">
+      <h1>Dashboard</h1>
+      <button class="logout-btn" (click)="logout()">Logout</button>
+    </div>
+
+    <div class="content" *ngIf="!loading">
+      <div class="welcome-section">
+        <h2>Welcome, {{ username || 'User' }}!</h2>
+        <p>{{ message }}</p>
+      </div>
+
+      <div class="info-section">
+        <h3>Application Status</h3>
+        <div class="status-item">
+          <span class="status-label">Authentication:</span>
+          <span class="status-value success">Active</span>
+        </div>
+        <div class="status-item">
+          <span class="status-label">JWT Token:</span>
+          <span class="status-value success">Valid</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="loading" *ngIf="loading">
+      Loading...
+    </div>
+  </div>
+</div>

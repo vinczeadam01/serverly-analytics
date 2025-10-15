@@ -1,0 +1,81 @@
+%% Mermaid architecture graph for Serverly Analytics
+%% Components: DNS (Bind9), Web (Apache), Email (Postfix), VPS Hosts (XEN), Kafka cluster, Go Consumers, TimescaleDB primary/replica, Spring Boot API, Redis cache, Angular UI
+
+flowchart LR
+  subgraph Sources[Server Estate / Producers]
+    DNS1[Bind9 DNS Server]
+    WEB1[Apache Web Server]
+    MAIL1[Postfix Mail Server]
+    VPS1[XEN Host 1]
+    VPS2[XEN Host 2]
+  end
+
+  subgraph KafkaCluster[Kafka Cluster]
+    K1[(Broker 1)]
+    K2[(Broker 2)]
+    K3[(Broker 3)]
+  end
+
+  subgraph Processing[Log Processing Layer]
+    GO1[Go Consumer Pod 1]
+    GO2[Go Consumer Pod 2]
+    DLQ[(processing_dlq)]
+  end
+
+  subgraph Storage[Time-Series & Cache]
+    TS1[(TimescaleDB Primary)]
+    TS2[(TimescaleDB Replica)]
+    REDIS[(Redis Cache)]
+  end
+
+  subgraph Backend[Application API]
+    API[Spring Boot REST API]
+  end
+
+  subgraph Frontend[User Interface]
+    UI[Angular Frontend]
+  end
+
+  %% Edges from sources to Kafka (producers)
+  DNS1 -- raw_logs --> K1
+  WEB1 -- raw_logs --> K2
+  MAIL1 -- raw_logs --> K3
+  VPS1 -- raw_logs --> K1
+  VPS2 -- raw_logs --> K2
+
+  %% Kafka replication
+  K1 <-- replication --> K2
+  K2 <-- replication --> K3
+  K1 <-- replication --> K3
+
+  %% Consumers
+  K1 --> GO1
+  K2 --> GO2
+  K3 --> GO1
+  GO1 -- parse fail --> DLQ
+  GO2 -- parse fail --> DLQ
+
+  %% Processing to storage
+  GO1 --> TS1
+  GO2 --> TS1
+  TS1 --> TS2
+
+  %% Backend querying storage & cache
+  API --> TS1
+  API --> REDIS
+  REDIS -. cache invalidation .-> API
+
+  %% Frontend consuming API
+  UI --> API
+
+  %% Notes
+  classDef critical fill:#ffdddd,stroke:#aa0000,color:#000;
+  classDef storage fill:#ddeeff,stroke:#003366,color:#000;
+  classDef compute fill:#e8ffe8,stroke:#2d662d,color:#000;
+  classDef broker fill:#fff2cc,stroke:#cc9900,color:#000;
+  classDef cache fill:#f0e0ff,stroke:#5a2d82,color:#000;
+
+  class TS1,TS2 storage;
+  class GO1,GO2 compute;
+  class K1,K2,K3 broker;
+  class REDIS cache;
