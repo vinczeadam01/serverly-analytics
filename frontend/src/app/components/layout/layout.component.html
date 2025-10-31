@@ -1,0 +1,111 @@
+<div class="d-flex vh-100 overflow-hidden" [class.sidebar-collapsed]="sidebarCollapsed">
+  <!-- Sidebar -->
+  <aside class="sidebar border-end text-white d-flex flex-column">
+    <!-- Sidebar Header -->
+    <div class="sidebar-header">
+      <div class="logo-icon">
+        <i class="bi bi-bar-chart-line-fill text-white"></i>
+      </div>
+      <span class="logo-text ms-3" *ngIf="!sidebarCollapsed">Serverly Analytics</span>
+    </div>
+
+    <!-- Sidebar Navigation -->
+    <nav class="sidebar-nav flex-grow-1 overflow-auto">
+      <a routerLink="/dashboard" routerLinkActive="active" class="nav-item">
+        <i class="bi bi-speedometer2"></i>
+        <span *ngIf="!sidebarCollapsed">Dashboard</span>
+      </a>
+
+      <a routerLink="/dns" routerLinkActive="active" class="nav-item">
+        <i class="bi bi-globe"></i>
+        <span *ngIf="!sidebarCollapsed">DNS</span>
+      </a>
+
+      <a routerLink="/webhosting" routerLinkActive="active" class="nav-item">
+        <i class="bi bi-hdd-stack"></i>
+        <span *ngIf="!sidebarCollapsed">Web Hosting</span>
+      </a>
+
+      <a routerLink="/email" routerLinkActive="active" class="nav-item">
+        <i class="bi bi-envelope"></i>
+        <span *ngIf="!sidebarCollapsed">Email</span>
+      </a>
+
+      <a routerLink="/vps" routerLinkActive="active" class="nav-item">
+        <i class="bi bi-server"></i>
+        <span *ngIf="!sidebarCollapsed">VPS</span>
+      </a>
+
+      <!-- Divider for collapsed state -->
+      <hr class="nav-divider" *ngIf="!sidebarCollapsed">
+
+      <a routerLink="/kafka" routerLinkActive="active" class="nav-item">
+        <i class="bi bi-diagram-3 kafka-icon"></i>
+        <span *ngIf="!sidebarCollapsed">Kafka</span>
+      </a>
+
+      <a routerLink="/users" routerLinkActive="active" class="nav-item">
+        <i class="bi bi-people-fill"></i>
+        <span *ngIf="!sidebarCollapsed">Users</span>
+      </a>
+    </nav>
+  </aside>
+
+  <!-- Main Content -->
+  <div class="flex-grow-1 d-flex flex-column overflow-hidden" style="flex-basis: 0;">
+    <!-- Top Bar -->
+    <header class="d-flex align-items-center justify-content-between">
+      <button class="header-toggle" (click)="toggleSidebar()">
+        <i class="bi bi-list"></i>
+      </button>
+
+      <div class="header-actions">
+        <button class="action-btn" (click)="toggleTheme()" [title]="themeService.isDarkMode() ? 'Switch to Light Mode' : 'Switch to Dark Mode'">
+          <i class="bi" [ngClass]="themeService.isDarkMode() ? 'bi-sun-fill' : 'bi-moon-fill'"></i>
+        </button>
+
+        <button class="action-btn" title="Help">
+          <i class="bi bi-question-circle"></i>
+        </button>
+
+        <!-- Profile Dropdown -->
+        <div class="dropdown profile-dropdown">
+          <button class="dropdown-toggle"
+                  type="button"
+                  id="profileDropdown"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false">
+            <div class="profile-avatar">
+              <i class="bi bi-person-fill"></i>
+            </div>
+            <div class="profile-info d-none d-md-flex">
+              <span class="profile-name">{{ username }}</span>
+              <span class="profile-role">Administrator</span>
+            </div>
+            <i class="bi bi-chevron-down d-none d-md-inline" style="font-size: 0.75rem; color: #94a3b8;"></i>
+          </button>
+          <ul class="dropdown-menu dropdown-menu-end shadow-sm" aria-labelledby="profileDropdown">
+            <li>
+              <a class="dropdown-item d-flex align-items-center gap-2" routerLink="/settings">
+                <i class="bi bi-gear"></i>
+                <span>Settings</span>
+              </a>
+            </li>
+            <li><hr class="dropdown-divider"></li>
+            <li>
+              <button class="dropdown-item d-flex align-items-center gap-2 text-danger" (click)="logout()">
+                <i class="bi bi-box-arrow-right"></i>
+                <span>Logout</span>
+              </button>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </header>
+
+    <!-- Content Area -->
+    <main class="flex-grow-1 overflow-auto">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+</div>

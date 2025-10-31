@@ -1,0 +1,104 @@
+<div class="container-fluid">
+  <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+    <div>
+      <button class="btn btn-link p-0 mb-2 text-decoration-none" (click)="goBack()">
+        <i class="bi bi-arrow-left me-2"></i>
+        Back to Domains
+      </button>
+      <h1 class="h2 fw-bold mb-1">
+        <i class="bi bi-envelope me-2 text-primary"></i>
+        {{ domain }}
+      </h1>
+    </div>
+    <div class="d-flex gap-2">
+      <app-period-selector></app-period-selector>
+      <button class="btn btn-primary btn-sm d-flex align-items-center gap-2" (click)="onRefresh()" [disabled]="view.loading()">
+        <i class="bi bi-arrow-clockwise" [class.spin]="view.loading()"></i>
+        <span class="d-none d-sm-inline">Refresh</span>
+      </button>
+    </div>
+  </div>
+
+  @if (view.error(); as error) {
+    <div class="alert alert-danger"><i class="bi bi-exclamation-triangle me-2"></i>{{ error }}</div>
+  }
+
+    <div class="row g-3 mb-4">
+      <!-- Email Flow Distribution Card -->
+      <div class="col-12 col-lg-6">
+        <div class="card border-0 shadow-sm h-100">
+          <div class="card-header border-bottom py-3">
+            <h5 class="mb-0 fw-semibold"><i class="bi bi-diagram-3 me-2"></i>Email Flow Distribution</h5>
+          </div>
+          <div class="card-body">
+            @if (view.loading()) {
+              <div class="list-group list-group-flush">
+                @for (_ of [1,2,3,4]; track _) {
+                  <div class="list-group-item d-flex justify-content-between align-items-center px-0">
+                    <div class="w-100">
+                      <div class="placeholder-glow mb-1"><span class="placeholder col-6"></span></div>
+                      <div class="placeholder-glow"><span class="placeholder col-4"></span></div>
+                    </div>
+                    <span class="badge rounded-pill">
+                      <span class="placeholder col-2"></span>
+                    </span>
+                  </div>
+                }
+              </div>
+            } @else if (view.data(); as data) {
+              @for (item of data.flow; track item.label) {
+                <div class="d-flex justify-content-between align-items-center mb-1">
+                  <div class="fw-semibold">{{ item.label }}</div>
+                  <div class="text-muted small">{{ item.count | number }} ({{ item.percentage }}%)</div>
+                </div>
+                <div class="progress mb-3" style="height: 8px;">
+                  <div class="progress-bar" [ngClass]="{
+                    'bg-primary': item.label==='Inbound',
+                    'bg-success': item.label==='Outbound',
+                    'bg-danger': item.label==='Bounced',
+                    'bg-warning': item.label==='Spam'
+                  }" [style.width.%]="item.percentage"></div>
+                </div>
+              }
+            }
+          </div>
+        </div>
+      </div>
+
+      <!-- Top Recipients -->
+      <div class="col-12 col-lg-6">
+        <div class="card border-0 shadow-sm h-100">
+          <div class="card-header border-bottom py-3">
+            <h5 class="mb-0 fw-semibold"><i class="bi bi-people me-2"></i>Top Recipients</h5>
+          </div>
+          <div class="card-body">
+            <div class="list-group list-group-flush">
+              @if (view.loading()) {
+                @for (_ of [1,2,3,4,5,6]; track _) {
+                  <div class="list-group-item d-flex justify-content-between align-items-center px-0">
+                    <div class="w-100">
+                      <div class="placeholder-glow mb-1"><span class="placeholder col-6"></span></div>
+                      <div class="placeholder-glow"><span class="placeholder col-4"></span></div>
+                    </div>
+                    <span class="badge rounded-pill">
+                      <span class="placeholder col-2"></span>
+                    </span>
+                  </div>
+                }
+              } @else if (view.data(); as data) {
+                @for (r of data.topRecipients; track r.email; let i = $index) {
+                  <div class="list-group-item d-flex justify-content-between align-items-center px-0">
+                    <div>
+                      <div class="fw-semibold">{{ r.email }}</div>
+                      <small class="text-muted">{{ r.received | number }} emails received</small>
+                    </div>
+                    <span class="badge bg-primary rounded-pill">{{ i + 1 }}</span>
+                  </div>
+                }
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>

@@ -1,0 +1,297 @@
+/* ========================================
+   Data Table Component Styles (TailAdmin Style)
+   ======================================== */
+
+// Table variables for light/dark mode
+:host-context(body.light-mode) {
+  --table-bg: #ffffff;
+  --table-border: #e5e7eb;
+  --table-header-bg: #f9fafb;
+  --table-header-text: #6b7280;
+  --table-row-hover: #f9fafb;
+  --table-text: #1f2937;
+  --table-text-secondary: #6b7280;
+  --table-stripe-bg: #fafafa;
+}
+
+:host-context(body.dark-mode) {
+  --table-bg: #1f2937;
+  --table-border: #374151;
+  --table-header-bg: #111827;
+  --table-header-text: #9ca3af;
+  --table-row-hover: #374151;
+  --table-text: #f9fafb;
+  --table-text-secondary: #d1d5db;
+  --table-stripe-bg: #273142;
+}
+
+// Common table wrapper
+::ng-deep .common-table-wrapper {
+  background: var(--table-bg);
+  border-radius: 0.5rem;
+  overflow: hidden;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+}
+
+:host-context(body.dark-mode) ::ng-deep .common-table-wrapper {
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.3), 0 1px 2px 0 rgba(0, 0, 0, 0.2);
+}
+
+// Table header
+::ng-deep .common-table-header {
+  display: grid;
+  background: var(--table-header-bg);
+  border-bottom: 1px solid var(--table-border);
+  padding: 1rem 1.5rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--table-header-text);
+}
+
+// Table row
+::ng-deep .common-table-row {
+  display: grid;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid var(--table-border);
+  transition: background-color 0.15s ease, transform 0.15s ease;
+  color: var(--table-text);
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  &.hoverable {
+    cursor: pointer;
+
+    &:hover {
+      background: var(--table-row-hover);
+    }
+  }
+
+  &.striped:nth-child(even) {
+    background: var(--table-stripe-bg);
+  }
+}
+
+// Table cell
+::ng-deep .common-table-cell {
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 0.875rem;
+
+  &.cell-primary {
+    font-weight: 600;
+    color: var(--table-text);
+  }
+
+  &.cell-secondary {
+    color: var(--table-text-secondary);
+    font-size: 0.8125rem;
+  }
+}
+
+// Search input styling
+::ng-deep .common-search-input {
+  position: relative;
+
+  .input-group {
+    border-radius: 0.5rem;
+    overflow: hidden;
+    border: 1px solid var(--table-border);
+    background: var(--table-bg);
+    transition: all 0.2s ease;
+
+    &:focus-within {
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    }
+
+    .input-group-text {
+      background: transparent;
+      border: none;
+      color: var(--table-text-secondary);
+      padding-left: 1rem;
+    }
+
+    .form-control {
+      background: transparent;
+      border: none;
+      color: var(--table-text);
+      padding-left: 0.5rem;
+      font-size: 0.875rem;
+
+      &::placeholder {
+        color: var(--table-text-secondary);
+      }
+
+      &:focus {
+        box-shadow: none;
+        outline: none;
+      }
+    }
+  }
+}
+
+// Status badges
+::ng-deep .status-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: capitalize;
+
+  &.status-active {
+    background: #10b981;
+    color: #ffffff;
+  }
+
+  &.status-inactive {
+    background: #6b7280;
+    color: #ffffff;
+  }
+
+  &.status-pending {
+    background: #f59e0b;
+    color: #ffffff;
+  }
+}
+
+:host-context(body.dark-mode) ::ng-deep .status-badge {
+  &.status-active {
+    background: #059669;
+  }
+
+  &.status-inactive {
+    background: #4b5563;
+  }
+
+  &.status-pending {
+    background: #d97706;
+  }
+}
+
+// Pagination
+::ng-deep .common-pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem;
+  background: var(--table-bg);
+  border-top: 1px solid var(--table-border);
+
+  .page-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 2rem;
+    height: 2rem;
+    padding: 0 0.75rem;
+    border-radius: 0.375rem;
+    border: 1px solid var(--table-border);
+    background: var(--table-bg);
+    color: var(--table-text);
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover:not(:disabled) {
+      background: var(--table-row-hover);
+      border-color: #3b82f6;
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    &.active {
+      background: #3b82f6;
+      border-color: #3b82f6;
+      color: #ffffff;
+    }
+
+    &.ellipsis {
+      border: none;
+      cursor: default;
+      pointer-events: none;
+    }
+  }
+}
+
+// Empty state
+::ng-deep .common-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 1rem;
+  text-align: center;
+
+  .empty-icon {
+    font-size: 3rem;
+    color: var(--table-text-secondary);
+    margin-bottom: 1rem;
+  }
+
+  .empty-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--table-text);
+    margin-bottom: 0.5rem;
+  }
+
+  .empty-description {
+    font-size: 0.875rem;
+    color: var(--table-text-secondary);
+  }
+}
+
+// Loading state moved to global styles (see styles.scss)
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  ::ng-deep .common-table-header {
+    display: none;
+  }
+
+  ::ng-deep .common-table-row {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 1.25rem 1rem;
+
+    .common-table-cell {
+      display: flex;
+      justify-content: space-between;
+      white-space: normal;
+
+      &::before {
+        content: attr(data-label);
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: 0.75rem;
+        color: var(--table-text-secondary);
+        margin-right: 1rem;
+      }
+    }
+  }
+
+  ::ng-deep .common-pagination {
+    flex-wrap: wrap;
+    gap: 0.25rem;
+
+    .page-btn {
+      min-width: 2.25rem;
+      padding: 0 0.5rem;
+    }
+  }
+}

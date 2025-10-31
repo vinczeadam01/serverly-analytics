@@ -1,0 +1,9 @@
+<select
+  class="form-select form-select-sm"
+  style="min-width: 180px;"
+  [value]="periodService.selectedPeriod()"
+  (change)="onPeriodChange($event)">
+  @for (period of periods; track period.value) {
+    <option [value]="period.value">{{ period.label }}</option>
+  }
+</select>

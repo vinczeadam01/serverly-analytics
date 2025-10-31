@@ -1,0 +1,269 @@
+<div class="container-fluid">
+  <!-- Page Header -->
+  <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+    <div>
+      <h1 class="h2 fw-bold mb-1">
+        <i class="bi bi-envelope me-2 text-primary"></i>
+        Email Analytics
+      </h1>
+      <p class="text-muted mb-0">Postfix mail server monitoring and delivery tracking</p>
+    </div>
+    <div class="d-flex gap-2">
+      <app-period-selector></app-period-selector>
+      <button class="btn btn-primary btn-sm d-flex align-items-center gap-2"
+              (click)="onRefresh()"
+              [disabled]="analyticsService.loading()">
+        <i class="bi bi-arrow-clockwise" [class.spin]="analyticsService.loading()"></i>
+        <span class="d-none d-sm-inline">Refresh</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Email Metrics -->
+  <div class="row g-3 mb-4">
+    <div class="col-12 col-sm-6 col-xl-3">
+      <div class="card border-0 shadow-sm h-100">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-start mb-3">
+            <div class="rounded-3 p-2 bg-primary bg-opacity-10">
+              <i class="bi bi-envelope-fill fs-4 text-primary"></i>
+            </div>
+            <span class="badge bg-success-subtle text-success">
+              <i class="bi bi-arrow-up"></i> 8.4%
+            </span>
+          </div>
+          <h6 class="text-muted text-uppercase small fw-semibold mb-2">Total Emails</h6>
+          <h3 class="fw-bold mb-1">89,456</h3>
+          <p class="text-muted small mb-0">Processed messages</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 col-sm-6 col-xl-3">
+      <div class="card border-0 shadow-sm h-100">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-start mb-3">
+            <div class="rounded-3 p-2 bg-success bg-opacity-10">
+              <i class="bi bi-check-circle fs-4 text-success"></i>
+            </div>
+            <span class="badge bg-success-subtle text-success">
+              <i class="bi bi-arrow-up"></i> 1.7%
+            </span>
+          </div>
+          <h6 class="text-muted text-uppercase small fw-semibold mb-2">Delivered</h6>
+          <h3 class="fw-bold mb-1">85,234</h3>
+          <p class="text-muted small mb-0">Successfully delivered</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 col-sm-6 col-xl-3">
+      <div class="card border-0 shadow-sm h-100">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-start mb-3">
+            <div class="rounded-3 p-2 bg-danger bg-opacity-10">
+              <i class="bi bi-x-circle fs-4 text-danger"></i>
+            </div>
+            <span class="badge bg-danger-subtle text-danger">
+              <i class="bi bi-arrow-up"></i> 3.2%
+            </span>
+          </div>
+          <h6 class="text-muted text-uppercase small fw-semibold mb-2">Bounced</h6>
+          <h3 class="fw-bold mb-1">3,789</h3>
+          <p class="text-muted small mb-0">Failed deliveries</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 col-sm-6 col-xl-3">
+      <div class="card border-0 shadow-sm h-100">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-start mb-3">
+            <div class="rounded-3 p-2 bg-warning bg-opacity-10">
+              <i class="bi bi-hourglass-split fs-4 text-warning"></i>
+            </div>
+            <span class="badge bg-warning-subtle text-warning">
+              <i class="bi bi-arrow-down"></i> 12.5%
+            </span>
+          </div>
+          <h6 class="text-muted text-uppercase small fw-semibold mb-2">Queue Size</h6>
+          <h3 class="fw-bold mb-1">433</h3>
+          <p class="text-muted small mb-0">Messages in queue</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Email Flow & Top Senders -->
+  <div class="row g-3 mb-4">
+    <div class="col-12 col-lg-6">
+      <div class="card border-0 shadow-sm">
+        <div class="card-header border-bottom py-3">
+          <h5 class="mb-0 fw-semibold">
+            <i class="bi bi-pie-chart me-2"></i>
+            Email Flow Distribution
+          </h5>
+        </div>
+        <div class="card-body">
+          <div class="mb-3 pb-3 border-bottom">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <div class="d-flex align-items-center gap-2">
+                <span class="badge bg-primary">Inbound</span>
+                <span class="fw-semibold">Incoming Messages</span>
+              </div>
+              <span class="text-muted">58%</span>
+            </div>
+            <div class="progress" style="height: 8px;">
+              <div class="progress-bar bg-primary" style="width: 58%;"></div>
+            </div>
+          </div>
+
+          <div class="mb-3 pb-3 border-bottom">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <div class="d-flex align-items-center gap-2">
+                <span class="badge bg-success">Outbound</span>
+                <span class="fw-semibold">Outgoing Messages</span>
+              </div>
+              <span class="text-muted">42%</span>
+            </div>
+            <div class="progress" style="height: 8px;">
+              <div class="progress-bar bg-success" style="width: 42%;"></div>
+            </div>
+          </div>
+
+          <div class="mb-3 pb-3 border-bottom">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <div class="d-flex align-items-center gap-2">
+                <span class="badge bg-danger">Spam Blocked</span>
+                <span class="fw-semibold">Filtered Messages</span>
+              </div>
+              <span class="text-muted">15.2%</span>
+            </div>
+            <div class="progress" style="height: 8px;">
+              <div class="progress-bar bg-danger" style="width: 15.2%;"></div>
+            </div>
+          </div>
+
+          <div class="mb-0">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <div class="d-flex align-items-center gap-2">
+                <span class="badge bg-warning">Deferred</span>
+                <span class="fw-semibold">Retry Queue</span>
+              </div>
+              <span class="text-muted">2.8%</span>
+            </div>
+            <div class="progress" style="height: 8px;">
+              <div class="progress-bar bg-warning" style="width: 2.8%;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 col-lg-6">
+      <div class="card border-0 shadow-sm">
+        <div class="card-header border-bottom py-3">
+          <h5 class="mb-0 fw-semibold">
+            <i class="bi bi-trophy me-2"></i>
+            Top Senders/Recipients
+          </h5>
+        </div>
+        <div class="card-body">
+          <div class="list-group list-group-flush">
+            <div class="list-group-item d-flex justify-content-between align-items-center px-0">
+              <div>
+                <div class="fw-semibold">notifications@serverly.com</div>
+                <small class="text-muted">12,345 emails sent</small>
+              </div>
+              <span class="badge bg-primary rounded-pill">1</span>
+            </div>
+            <div class="list-group-item d-flex justify-content-between align-items-center px-0">
+              <div>
+                <div class="fw-semibold">support@serverly.com</div>
+                <small class="text-muted">8,234 emails sent</small>
+              </div>
+              <span class="badge bg-primary rounded-pill">2</span>
+            </div>
+            <div class="list-group-item d-flex justify-content-between align-items-center px-0">
+              <div>
+                <div class="fw-semibold">admin@serverly.com</div>
+                <small class="text-muted">5,678 emails sent</small>
+              </div>
+              <span class="badge bg-primary rounded-pill">3</span>
+            </div>
+            <div class="list-group-item d-flex justify-content-between align-items-center px-0">
+              <div>
+                <div class="fw-semibold">alerts@serverly.com</div>
+                <small class="text-muted">4,567 emails sent</small>
+              </div>
+              <span class="badge bg-primary rounded-pill">4</span>
+            </div>
+            <div class="list-group-item d-flex justify-content-between align-items-center px-0 border-bottom-0">
+              <div>
+                <div class="fw-semibold">marketing@serverly.com</div>
+                <small class="text-muted">3,890 emails sent</small>
+              </div>
+              <span class="badge bg-primary rounded-pill">5</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mail Server Statistics Table -->
+  <div class="row">
+    <div class="col-12">
+      <div class="card border-0 shadow-sm">
+        <div class="card-header border-bottom py-3">
+          <h5 class="mb-0 fw-semibold">
+            <i class="bi bi-server me-2"></i>
+            Mail Server Statistics
+          </h5>
+        </div>
+        <div class="card-body p-0">
+          <div class="table-responsive">
+            <table class="table table-hover mb-0">
+              <thead class="table-light">
+                <tr>
+                  <th class="border-0 text-muted small text-uppercase fw-semibold">Server</th>
+                  <th class="border-0 text-muted small text-uppercase fw-semibold">Total Processed</th>
+                  <th class="border-0 text-muted small text-uppercase fw-semibold">Delivery Rate</th>
+                  <th class="border-0 text-muted small text-uppercase fw-semibold">Queue Size</th>
+                  <th class="border-0 text-muted small text-uppercase fw-semibold">Load</th>
+                  <th class="border-0 text-muted small text-uppercase fw-semibold">Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="fw-semibold">mail-01.serverly.com</td>
+                  <td>45,678</td>
+                  <td><span class="text-success">95.3%</span></td>
+                  <td>234</td>
+                  <td>
+                    <div class="progress" style="height: 8px; width: 100px;">
+                      <div class="progress-bar bg-success" style="width: 42%;"></div>
+                    </div>
+                  </td>
+                  <td><span class="badge bg-success">Online</span></td>
+                </tr>
+                <tr>
+                  <td class="fw-semibold">mail-02.serverly.com</td>
+                  <td>43,778</td>
+                  <td><span class="text-success">95.1%</span></td>
+                  <td>199</td>
+                  <td>
+                    <div class="progress" style="height: 8px; width: 100px;">
+                      <div class="progress-bar bg-success" style="width: 38%;"></div>
+                    </div>
+                  </td>
+                  <td><span class="badge bg-success">Online</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

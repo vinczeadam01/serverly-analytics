@@ -1,0 +1,65 @@
+.metric-card {
+  background: var(--bs-body-bg);
+  border-radius: 12px;
+  border: 1px solid var(--chart-border-color, #e5e7eb);
+  padding: 16px;
+  display: grid;
+  grid-template-columns: 40px auto;
+  grid-template-rows: auto auto;
+  gap: 8px 12px;
+  align-items: center;
+}
+.metric-icon {
+  grid-row: span 2;
+  display: inline-flex;
+  width: 40px; height: 40px;
+  align-items: center; justify-content: center;
+  border-radius: 8px;
+}
+.metric-label { font-size: 0.75rem; color: var(--bs-secondary-color); text-transform: uppercase; font-weight: 600; }
+.metric-value { font-size: 1.375rem; font-weight: 700; }
+
+.chart-card { border: 1px solid var(--chart-border-color, #e5e7eb); border-radius: 12px; overflow: hidden; }
+.card-header { padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--chart-border-color, #e5e7eb); }
+.card-title { margin: 0; font-size: 1rem; font-weight: 700; }
+.card-body { padding: 16px; }
+.chart-container { position: relative; height: 320px; }
+.chart-container-bar { position: relative; height: 280px; }
+
+/* Loading shimmer overlay for charts */
+.chart-loading-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: 8px;
+  background: linear-gradient(90deg,
+    rgba(0,0,0,0.04) 25%,
+    rgba(0,0,0,0.08) 37%,
+    rgba(0,0,0,0.04) 63%);
+  background-size: 400% 100%;
+  animation: chart-shimmer 1.2s ease-in-out infinite;
+}
+
+@keyframes chart-shimmer {
+  0% { background-position: 100% 0; }
+  100% { background-position: 0 0; }
+}
+
+/* Dedicated chart skeleton block (shown instead of canvas) */
+.chart-skeleton {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  border-radius: 8px;
+  background: linear-gradient(90deg,
+    rgba(0,0,0,0.04) 25%,
+    rgba(0,0,0,0.08) 37%,
+    rgba(0,0,0,0.04) 63%);
+  background-size: 400% 100%;
+  animation: chart-shimmer 1.2s ease-in-out infinite;
+}
+
+.loading-state { display:flex; flex-direction:column; align-items:center; gap:12px; padding:32px; color: var(--bs-secondary-color); }
+.loading-text { margin: 0; }
+
+.chart-type-selector .btn { min-width: 110px; }

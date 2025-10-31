@@ -1,0 +1,38 @@
+.cell-primary { font-weight: 600; }
+
+/* Modal theming for better input visibility */
+:host .modal-content {
+  background: var(--table-bg);
+  color: var(--table-text);
+  border: 1px solid var(--table-border);
+}
+
+:host .modal .form-control,
+:host .modal .form-select {
+  background: var(--table-bg);
+  color: var(--table-text);
+  border: 1px solid var(--table-border);
+}
+
+:host .modal .form-control::placeholder {
+  color: var(--table-text-secondary);
+  opacity: 1;
+}
+
+:host .modal .form-control:focus,
+:host .modal .form-select:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 0.2rem rgba(59, 130, 246, 0.25);
+}
+
+/* Improve contrast specifically in dark mode */
+:host-context(body.dark-mode) .modal .form-control,
+:host-context(body.dark-mode) .modal .form-select {
+  background: #111827; /* slightly darker than table-bg */
+  color: #f9fafb;
+  border-color: #374151;
+}
+
+:host-context(body.dark-mode) .modal .form-control::placeholder {
+  color: #9ca3af;
+}

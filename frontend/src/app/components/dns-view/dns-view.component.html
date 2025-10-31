@@ -1,0 +1,182 @@
+<div class="container-fluid">
+  <!-- Page Header -->
+  <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+    <div>
+      <button class="btn btn-link p-0 mb-2 text-decoration-none" (click)="goBack()">
+        <i class="bi bi-arrow-left me-2"></i>
+        Back to DNS List
+      </button>
+      <h1 class="h2 fw-bold mb-1">
+        <i class="bi bi-globe me-2 text-primary"></i>
+        {{ zoneName }}
+      </h1>
+    </div>
+    <div class="d-flex gap-2">
+      <app-period-selector></app-period-selector>
+      <button class="btn btn-primary btn-sm d-flex align-items-center gap-2"
+              (click)="onRefresh()"
+              [disabled]="viewService.loading()">
+        <i class="bi bi-arrow-clockwise" [class.spin]="viewService.loading()"></i>
+        <span class="d-none d-sm-inline">Refresh</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Error State -->
+  @if (viewService.error(); as error) {
+  <div class="alert alert-danger">
+    <i class="bi bi-exclamation-triangle me-2"></i>
+    {{ error }}
+  </div>
+  }
+
+  <!-- Charts Content -->
+  <div class="row">
+    <!-- Line Chart Section -->
+    <div class="col-12 mb-4">
+      <div class="chart-card">
+        <div class="card-header">
+          <h3 class="card-title">Queries Over Time</h3>
+          <!-- Button Group Selector -->
+          <div class="btn-group chart-type-selector" role="group">
+            <button type="button"
+                    class="btn btn-sm"
+                    [class.btn-primary]="selectedChartType() === 'recordType'"
+                    [class.btn-outline-primary]="selectedChartType() !== 'recordType'"
+                    (click)="selectChartType('recordType')">
+              Record Type
+            </button>
+            <button type="button"
+                    class="btn btn-sm"
+                    [class.btn-primary]="selectedChartType() === 'recordName'"
+                    [class.btn-outline-primary]="selectedChartType() !== 'recordName'"
+                    (click)="selectChartType('recordName')">
+              Record Name
+            </button>
+            <button type="button"
+                    class="btn btn-sm"
+                    [class.btn-primary]="selectedChartType() === 'sourceIp'"
+                    [class.btn-outline-primary]="selectedChartType() !== 'sourceIp'"
+                    (click)="selectChartType('sourceIp')">
+              Source IP
+            </button>
+            <button type="button"
+                    class="btn btn-sm"
+                    [class.btn-primary]="selectedChartType() === 'targetIp'"
+                    [class.btn-outline-primary]="selectedChartType() !== 'targetIp'"
+                    (click)="selectChartType('targetIp')">
+              Target IP
+            </button>
+          </div>
+        </div>
+          <div class="card-body">
+          <div class="chart-container">
+            @if (viewService.loading()) {
+              <div class="skeleton-chart skeleton-animate"></div>
+            } @else {
+              <canvas baseChart
+                      [type]="lineChartType"
+                      [data]="lineChartData()"
+                      [options]="lineChartOptions">
+              </canvas>
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bar Charts Section -->
+    <div class="col-12">
+      <h3 class="h5 fw-bold mb-3">Top Statistics</h3>
+    </div>
+
+    <!-- Record Types Bar Chart -->
+    <div class="col-12 col-lg-6 mb-4">
+      <div class="chart-card">
+        <div class="card-header">
+          <h4 class="card-title">Top Record Types</h4>
+        </div>
+          <div class="card-body">
+          <div class="chart-container-bar">
+            @if (viewService.loading()) {
+              <div class="skeleton-chart skeleton-animate"></div>
+            } @else {
+              <canvas baseChart
+                      [type]="barChartType"
+                      [data]="recordTypesChartData()"
+                      [options]="barChartOptions">
+              </canvas>
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Record Names Bar Chart -->
+    <div class="col-12 col-lg-6 mb-4">
+      <div class="chart-card">
+        <div class="card-header">
+          <h4 class="card-title">Top Record Names</h4>
+        </div>
+          <div class="card-body">
+          <div class="chart-container-bar">
+            @if (viewService.loading()) {
+              <div class="skeleton-chart skeleton-animate"></div>
+            } @else {
+              <canvas baseChart
+                      [type]="barChartType"
+                      [data]="recordNamesChartData()"
+                      [options]="barChartOptions">
+              </canvas>
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Source IPs Bar Chart -->
+    <div class="col-12 col-lg-6 mb-4">
+      <div class="chart-card">
+        <div class="card-header">
+          <h4 class="card-title">Top Source IPs</h4>
+        </div>
+          <div class="card-body">
+          <div class="chart-container-bar">
+            @if (viewService.loading()) {
+              <div class="skeleton-chart skeleton-animate"></div>
+            } @else {
+              <canvas baseChart
+                      [type]="barChartType"
+                      [data]="sourceIpsChartData()"
+                      [options]="barChartOptions">
+              </canvas>
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Target IPs Bar Chart -->
+    <div class="col-12 col-lg-6 mb-4">
+      <div class="chart-card">
+        <div class="card-header">
+          <h4 class="card-title">Top Target IPs</h4>
+        </div>
+          <div class="card-body">
+          <div class="chart-container-bar">
+            @if (viewService.loading()) {
+              <div class="skeleton-chart skeleton-animate"></div>
+            } @else {
+              <canvas baseChart
+                      [type]="barChartType"
+                      [data]="targetIpsChartData()"
+                      [options]="barChartOptions">
+              </canvas>
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

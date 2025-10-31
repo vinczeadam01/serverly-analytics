@@ -1,0 +1,37 @@
+.chart-card { border: 1px solid var(--chart-border-color, #e5e7eb); border-radius: 12px; overflow: hidden; }
+.card-header { padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--chart-border-color, #e5e7eb); }
+.card-title { margin: 0; font-size: 1rem; font-weight: 700; }
+.card-body { padding: 16px; }
+.chart-container { position: relative; height: 320px; }
+.chart-skeleton {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  border-radius: 8px;
+  background: linear-gradient(90deg,
+    rgba(0,0,0,0.04) 25%,
+    rgba(0,0,0,0.08) 37%,
+    rgba(0,0,0,0.04) 63%);
+  background-size: 400% 100%;
+  animation: chart-shimmer 1.2s ease-in-out infinite;
+}
+.chart-loading-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: 8px;
+  background: linear-gradient(90deg,
+    rgba(0,0,0,0.04) 25%,
+    rgba(0,0,0,0.08) 37%,
+    rgba(0,0,0,0.04) 63%);
+  background-size: 400% 100%;
+  animation: chart-shimmer 1.2s ease-in-out infinite;
+}
+
+@keyframes chart-shimmer {
+  0% { background-position: 100% 0; }
+  100% { background-position: 0 0; }
+}
+.loading-state { display:flex; flex-direction:column; align-items:center; gap:12px; padding:32px; color: var(--bs-secondary-color); }
+.loading-text { margin: 0; }
+.chart-type-selector .btn { min-width: 110px; }

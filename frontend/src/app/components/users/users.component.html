@@ -1,0 +1,82 @@
+<div class="container-fluid">
+  <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+    <div>
+      <h1 class="h2 fw-bold mb-1">
+        <i class="bi bi-people me-2 text-primary"></i>
+        Users
+      </h1>
+      <p class="text-muted mb-0">Admin: manage platform users</p>
+    </div>
+    <div class="d-flex gap-2">
+      <button class="btn btn-success btn-sm d-flex align-items-center gap-2" (click)="openAdd()">
+        <i class="bi bi-person-plus"></i>
+        <span class="d-none d-sm-inline">Add User</span>
+      </button>
+      <button class="btn btn-primary btn-sm d-flex align-items-center gap-2" (click)="onRefresh()" [disabled]="users.loading()">
+        <i class="bi bi-arrow-clockwise" [class.spin]="users.loading()"></i>
+        <span class="d-none d-sm-inline">Refresh</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-12">
+      <app-data-table
+        [data]="users.paginatedUsers()"
+        [columns]="columns"
+        [loading]="users.loading()"
+        [error]="users.error()"
+        [searchPlaceholder]="'Search name, email, role, status'"
+        [currentPage]="users.page()"
+        [totalPages]="users.totalPages()"
+        [emptyMessage]="'No users found'"
+        (searchChange)="onSearchChange($event)"
+        (pageChange)="onPageChange($event)"
+        (rowClick)="onRowClick($event)">
+      </app-data-table>
+    </div>
+  </div>
+
+  @if (showAdd) {
+  <div class="modal fade show d-block" tabindex="-1" role="dialog" style="background: rgba(0,0,0,0.5);">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title"><i class="bi bi-person-plus me-2"></i>Add User</h5>
+          <button type="button" class="btn-close" aria-label="Close" (click)="closeAdd()"></button>
+        </div>
+        <div class="modal-body">
+          <form (submit)="$event.preventDefault(); saveAdd();">
+            <div class="mb-3">
+              <label class="form-label">Name</label>
+              <input type="text" class="form-control" [(ngModel)]="newUser.name" name="name" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Email</label>
+              <input type="email" class="form-control" [(ngModel)]="newUser.email" name="email" required>
+            </div>
+            <div class="row g-2">
+              <div class="col-12 col-md-6">
+                <label class="form-label">Role</label>
+                <select class="form-select" [(ngModel)]="newUser.role" name="role">
+                  @for (r of roles; track r) { <option [value]="r">{{ r }}</option> }
+                </select>
+              </div>
+              <div class="col-12 col-md-6">
+                <label class="form-label">Status</label>
+                <select class="form-select" [(ngModel)]="newUser.status" name="status">
+                  @for (s of statuses; track s) { <option [value]="s">{{ s }}</option> }
+                </select>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" (click)="closeAdd()">Cancel</button>
+          <button type="button" class="btn btn-primary" [disabled]="!newUser.name || !newUser.email" (click)="saveAdd()">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  }
+</div>

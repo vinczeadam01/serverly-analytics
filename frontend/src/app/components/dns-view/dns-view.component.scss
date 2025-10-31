@@ -1,0 +1,74 @@
+
+
+// Status badge (reuse from global styles or data-table)
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: capitalize;
+
+  &.status-active {
+    background: #10b981;
+    color: #ffffff;
+  }
+
+  &.status-inactive {
+    background: #6b7280;
+    color: #ffffff;
+  }
+
+  &.status-pending {
+    background: #f59e0b;
+    color: #ffffff;
+  }
+}
+
+:host-context(body.dark-mode) .status-badge {
+  &.status-active {
+    background: #059669;
+  }
+
+  &.status-inactive {
+    background: #4b5563;
+  }
+
+  &.status-pending {
+    background: #d97706;
+  }
+}
+
+// Loading state moved to global styles (see styles.scss)
+/* Loading shimmer overlay for charts */
+.chart-loading-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: 8px;
+  background: linear-gradient(90deg,
+    rgba(0,0,0,0.04) 25%,
+    rgba(0,0,0,0.08) 37%,
+    rgba(0,0,0,0.04) 63%);
+  background-size: 400% 100%;
+  animation: chart-shimmer 1.2s ease-in-out infinite;
+}
+
+@keyframes chart-shimmer {
+  0% { background-position: 100% 0; }
+  100% { background-position: 0 0; }
+}
+
+.chart-skeleton {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  border-radius: 8px;
+  background: linear-gradient(90deg,
+    rgba(0,0,0,0.04) 25%,
+    rgba(0,0,0,0.08) 37%,
+    rgba(0,0,0,0.04) 63%);
+  background-size: 400% 100%;
+  animation: chart-shimmer 1.2s ease-in-out infinite;
+}

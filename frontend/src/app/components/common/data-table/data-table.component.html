@@ -1,0 +1,116 @@
+<!-- Search Bar -->
+@if (showSearch()) {
+<div class="mb-3">
+  <div class="common-search-input">
+    <div class="input-group">
+      <span class="input-group-text">
+        <i class="bi bi-search"></i>
+      </span>
+      <input
+        type="text"
+        class="form-control"
+        [placeholder]="searchPlaceholder()"
+        [(ngModel)]="searchQuery"
+        (input)="onSearchChange($event)">
+    </div>
+  </div>
+</div>
+}
+
+<!-- Loading State (skeleton) -->
+@if (loading()) {
+<div class="skeleton-table skeleton-animate"></div>
+}
+
+<!-- Error State -->
+@else if (error(); as error) {
+<div>
+  <div class="alert alert-danger mb-0">
+    <i class="bi bi-exclamation-triangle me-2"></i>
+    {{ error }}
+  </div>
+</div>
+}
+
+<!-- Table Content -->
+@else if (data().length > 0) {
+<div class="common-table-wrapper">
+  <!-- Table Header -->
+  <div class="common-table-header" [style.grid-template-columns]="gridTemplate()">
+    @for (column of columns(); track column.key) {
+    <div class="common-table-cell">{{ column.label }}</div>
+    }
+  </div>
+
+  <!-- Table Body -->
+  @for (item of data(); track trackByIndex($index)) {
+  <div class="common-table-row hoverable"
+       [style.grid-template-columns]="gridTemplate()"
+       (click)="onRowClick(item)">
+    @for (column of columns(); track column.key) {
+    <div class="common-table-cell {{ getCellClass(column) }}" [attr.data-label]="column.label">
+      <span [innerHTML]="getCellValue(item, column)"></span>
+    </div>
+    }
+  </div>
+  }
+</div>
+
+<!-- Pagination -->
+@if (showPagination() && totalPages() > 1) {
+<div class="common-pagination">
+  <!-- Previous Button -->
+  <button
+    class="page-btn"
+    (click)="previousPage()"
+    [disabled]="currentPage() === 1">
+    <i class="bi bi-chevron-left"></i>
+  </button>
+
+  <!-- First Page -->
+  @if (pageNumbers()[0] > 1) {
+  <button class="page-btn" (click)="onPageChange(1)">1</button>
+  @if (pageNumbers()[0] > 2) {
+  <span class="page-btn ellipsis">...</span>
+  }
+  }
+
+  <!-- Page Numbers -->
+  @for (page of pageNumbers(); track page) {
+  <button
+    class="page-btn"
+    [class.active]="page === currentPage()"
+    (click)="onPageChange(page)">
+    {{ page }}
+  </button>
+  }
+
+  <!-- Last Page -->
+  @if (pageNumbers()[pageNumbers().length - 1] < totalPages()) {
+  @if (pageNumbers()[pageNumbers().length - 1] < totalPages() - 1) {
+  <span class="page-btn ellipsis">...</span>
+  }
+  <button class="page-btn" (click)="onPageChange(totalPages())">
+    {{ totalPages() }}
+  </button>
+  }
+
+  <!-- Next Button -->
+  <button
+    class="page-btn"
+    (click)="nextPage()"
+    [disabled]="currentPage() === totalPages()">
+    <i class="bi bi-chevron-right"></i>
+  </button>
+</div>
+}
+}
+
+<!-- Empty State -->
+@else {
+<div class="common-empty-state">
+  <i class="bi bi-search empty-icon"></i>
+  <div class="empty-title">{{ emptyMessage() }}</div>
+  <div class="empty-description">{{ emptyDescription() }}</div>
+</div>
+}
