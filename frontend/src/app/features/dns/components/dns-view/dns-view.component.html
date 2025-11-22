@@ -1,0 +1,124 @@
+<div class="container-fluid">
+  <!-- Page Header -->
+  <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+    <div>
+      <button class="btn btn-link p-0 mb-2 text-decoration-none" (click)="goBack()">
+        <i class="bi bi-arrow-left me-2"></i>
+        Back to DNS List
+      </button>
+      <h1 class="h2 fw-bold mb-1">
+        <i class="bi bi-globe me-2 text-primary"></i>
+        {{ zoneName }}
+      </h1>
+    </div>
+    <div class="d-flex gap-2">
+      <app-period-selector></app-period-selector>
+      <button class="btn btn-primary btn-sm d-flex align-items-center gap-2"
+              (click)="onRefresh()"
+              [disabled]="loading()">
+        <i class="bi bi-arrow-clockwise" [class.spin]="loading()"></i>
+        <span class="d-none d-sm-inline">Refresh</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Error State -->
+  @if (error(); as errorMsg) {
+  <div class="alert alert-danger">
+    <i class="bi bi-exclamation-triangle me-2"></i>
+    {{ errorMsg }}
+  </div>
+  }
+
+  <!-- Charts Content -->
+  <div class="row">
+    <!-- Line Chart Section -->
+    <div class="col-12 mb-4">
+      <div class="chart-card">
+        <div class="card-header">
+          <h3 class="card-title">Queries Over Time</h3>
+          <!-- Button Group Selector -->
+          <div class="btn-group chart-type-selector" role="group">
+            <button type="button"
+                    class="btn btn-sm"
+                    [class.btn-primary]="selectedChartType() === 'query'"
+                    [class.btn-outline-primary]="selectedChartType() !== 'query'"
+                    (click)="selectChartType('query')">
+              Queries
+            </button>
+            <button type="button"
+                    class="btn btn-sm"
+                    [class.btn-primary]="selectedChartType() === 'responseTime'"
+                    [class.btn-outline-primary]="selectedChartType() !== 'responseTime'"
+                    (click)="selectChartType('responseTime')">
+              Response Time
+            </button>
+          </div>
+        </div>
+          <div class="card-body">
+          <div class="chart-container">
+            @if (loading()) {
+              <div class="skeleton-chart skeleton-animate"></div>
+            } @else {
+              <canvas baseChart
+                      [type]="lineChartType"
+                      [data]="lineChartData()"
+                      [options]="lineChartOptions">
+              </canvas>
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Additional Charts Section -->
+    <div class="col-12">
+      <h3 class="h5 fw-bold mb-3">Additional Statistics</h3>
+    </div>
+
+    <!-- Record Types Pie Chart -->
+    <div class="col-12 col-lg-6 mb-4">
+      <div class="chart-card">
+        <div class="card-header">
+          <h4 class="card-title">Record Types Distribution</h4>
+        </div>
+          <div class="card-body">
+          <div class="chart-container-bar">
+            @if (loading()) {
+              <div class="skeleton-chart skeleton-animate"></div>
+            } @else {
+              <canvas baseChart
+                      [type]="pieChartType"
+                      [data]="recordTypesPieData()"
+                      [options]="pieChartOptions">
+              </canvas>
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Top Domains Bar Chart -->
+    <div class="col-12 col-lg-6 mb-4">
+      <div class="chart-card">
+        <div class="card-header">
+          <h4 class="card-title">Top Domains</h4>
+        </div>
+          <div class="card-body">
+          <div class="chart-container-bar">
+            @if (loading()) {
+              <div class="skeleton-chart skeleton-animate"></div>
+            } @else {
+              <canvas baseChart
+                      [type]="barChartType"
+                      [data]="topDomainsChartData()"
+                      [options]="barChartOptions">
+              </canvas>
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
