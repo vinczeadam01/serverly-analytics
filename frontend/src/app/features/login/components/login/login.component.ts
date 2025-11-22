@@ -14,7 +14,7 @@ import { LoginRequest } from '../../../../core/auth/models/auth.models';
 })
 export class LoginComponent {
   loginData: LoginRequest = {
-    username: '',
+    email: '',
     password: ''
   };
   errorMessage = '';

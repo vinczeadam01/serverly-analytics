@@ -11,7 +11,7 @@ public class UserDto {
     private Long id;
     private String name;
     private String email;
-    private String role; // admin, user, viewer
+    private String role; // admin, user
     private String status; // active, disabled, pending
-    private String lastLogin; // ISO date string
+    private String lastLogin;
 }

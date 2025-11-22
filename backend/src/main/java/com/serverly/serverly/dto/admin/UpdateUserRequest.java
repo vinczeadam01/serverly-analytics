@@ -10,6 +10,6 @@ import lombok.NoArgsConstructor;
 public class UpdateUserRequest {
     private String name;
     private String email;
-    private String role; // admin, user, viewer
-    private String status; // active, disabled, pending
+    private String role;
+    private String status;
 }

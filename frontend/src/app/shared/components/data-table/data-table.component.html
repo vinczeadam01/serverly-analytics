@@ -46,10 +46,20 @@
   @for (item of data(); track trackByIndex($index)) {
   <div class="common-table-row hoverable"
        [style.grid-template-columns]="gridTemplate()"
-       (click)="onRowClick(item)">
+       (click)="onRowClick(item, $event)">
     @for (column of columns(); track column.key) {
     <div class="common-table-cell {{ getCellClass(column) }}" [attr.data-label]="column.label">
-      <span [innerHTML]="getCellValue(item, column)"></span>
+      @if (column.actions) {
+        <div class="d-flex gap-2">
+          @for (action of column.actions; track action.action) {
+            <button [class]="action.cssClass" (click)="onActionClick(item, action.action, $event)">
+              <i [class]="action.icon"></i> {{ action.label }}
+            </button>
+          }
+        </div>
+      } @else {
+        <span [innerHTML]="getCellValue(item, column)"></span>
+      }
     </div>
     }
   </div>

@@ -12,16 +12,16 @@
       <form (ngSubmit)="onSubmit()" #loginForm="ngForm" class="login-form">
         <div class="form-floating mb-3">
           <input
-            type="text"
+            type="email"
             class="form-control"
-            id="username"
-            name="username"
-            placeholder="Username"
-            [(ngModel)]="loginData.username"
+            id="email"
+            name="email"
+            placeholder="Email"
+            [(ngModel)]="loginData.email"
             required
             [disabled]="loading"
           />
-          <label for="username">Username</label>
+          <label for="email">Email</label>
         </div>
 
         <div class="form-floating mb-3">

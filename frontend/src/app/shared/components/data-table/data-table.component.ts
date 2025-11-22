@@ -2,12 +2,20 @@ import { Component, input, output, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
+export interface ActionButton {
+  action: string;
+  label: string;
+  icon: string;
+  cssClass: string;
+}
+
 export interface TableColumn<T = any> {
   key: string;
   label: string;
-  width?: string;  // e.g., '2fr', '1fr', '150px'
-  cssClass?: string;  // e.g., 'cell-primary', 'cell-secondary'
-  render?: (item: T) => string;  // Custom rendering function
+  width?: string;
+  cssClass?: string;
+  render?: (item: T) => string;
+  actions?: ActionButton[];
 }
 
 @Component({
@@ -34,7 +42,8 @@ export class DataTableComponent<T extends Record<string, any>> {
   // Outputs
   searchChange = output<string>();
   pageChange = output<number>();
-  rowClick = output<T>();
+  rowClick = output<{ row: T, event: Event }>();
+  actionClick = output<{ row: T, action: string, event: Event }>();
 
   // Local search query for two-way binding
   searchQuery = '';
@@ -107,7 +116,12 @@ export class DataTableComponent<T extends Record<string, any>> {
     return index;
   }
 
-  onRowClick(item: T): void {
-    this.rowClick.emit(item);
+  onRowClick(item: T, event: Event): void {
+    this.rowClick.emit({ row: item, event });
+  }
+
+  onActionClick(item: T, action: string, event: Event): void {
+    event.stopPropagation();
+    this.actionClick.emit({ row: item, action, event });
   }
 }

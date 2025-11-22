@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { DataTableComponent, TableColumn } from '../../../../shared/components/data-table/data-table.component';
+import { DataTableComponent, TableColumn, ActionButton } from '../../../../shared/components/data-table/data-table.component';
 import { UserService, UserDto } from '../../services/user.service';
 
 @Component({
@@ -16,14 +16,17 @@ export class UsersComponent implements OnInit {
     { key: 'name', label: 'Name', width: '2fr', cssClass: 'cell-primary' },
     { key: 'email', label: 'Email', width: '2fr' },
     { key: 'role', label: 'Role', width: '1fr', render: u => `<span class="badge bg-light text-dark">${u.role}</span>` },
-    { key: 'status', label: 'Status', width: '1fr', render: u => `<span class="status-badge status-${u.status}">${u.status}</span>` },
-    { key: 'lastLogin', label: 'Last Login', width: '1.5fr', render: u => new Date(u.lastLogin).toLocaleString() },
-    { key: 'actions', label: 'Actions', width: '1.5fr', render: () => `
-        <div class=\"d-flex gap-2\">
-          <button class=\"btn btn-sm btn-outline-primary\" data-action=\"edit\">Edit</button>
-          <button class=\"btn btn-sm btn-outline-danger\" data-action=\"delete\">Delete</button>
-        </div>
-      ` },
+    { key: 'status', label: 'Status', width: '1fr', render: u => `<span class="badge bg-${u.status === 'active' ? 'success' : u.status === 'disabled' ? 'danger' : 'warning'}">${u.status}</span>` },
+    { key: 'lastLogin', label: 'Last Login', width: '1.5fr', render: u => u.lastLogin ? new Date(u.lastLogin).toLocaleString() : 'Never' },
+    {
+      key: 'actions',
+      label: 'Actions',
+      width: '1.5fr',
+      actions: [
+        { action: 'edit', label: 'Edit', icon: 'bi bi-pencil', cssClass: 'btn btn-sm btn-outline-primary' },
+        { action: 'delete', label: 'Delete', icon: 'bi bi-trash', cssClass: 'btn btn-sm btn-outline-danger' }
+      ]
+    },
   ];
 
   constructor(public users: UserService) {}
@@ -36,25 +39,29 @@ export class UsersComponent implements OnInit {
   onSearchChange(q: string) { this.users.setSearch(q); }
   onPageChange(p: number) { this.users.setPage(p); }
 
-  onRowClick(row: UserDto, event?: Event) {
-    const target = (event?.target as HTMLElement) ?? null;
-    const actionBtn = target?.closest('[data-action]') as HTMLElement | null;
-    const action = actionBtn?.getAttribute('data-action');
-    if (action === 'delete') {
-      if (confirm(`Delete ${row.email}?`)) this.users.delete(row.id);
-    } else if (action === 'edit') {
-      const nextRole = row.role === 'admin' ? 'user' : 'admin';
-      this.users.update({ id: row.id, role: nextRole });
+  onAction(event: { row: UserDto, action: string, event: Event }) {
+    if (event.action === 'edit') {
+      this.openEdit(event.row);
+    } else if (event.action === 'delete') {
+      this.openDelete(event.row);
     }
   }
 
-  // Add User modal state
   showAdd = false;
-  roles: Array<UserDto['role']> = ['admin','user','viewer'];
+  showEdit = false;
+  showDelete = false;
+  roles: Array<UserDto['role']> = ['admin','user'];
   statuses: Array<UserDto['status']> = ['active','disabled','pending'];
+
   newUser: { name: string; email: string; role: UserDto['role']; status: UserDto['status'] } = {
     name: '', email: '', role: 'user', status: 'active'
   };
+
+  editUser: { id: number; name: string; email: string; role: UserDto['role']; status: UserDto['status'] } = {
+    id: 0, name: '', email: '', role: 'user', status: 'active'
+  };
+
+  deleteUser: UserDto | null = null;
 
   openAdd() { this.showAdd = true; }
   closeAdd() { this.showAdd = false; this.resetNewUser(); }
@@ -64,5 +71,30 @@ export class UsersComponent implements OnInit {
     this.users.create({ name, email, role, status } as any);
     this.closeAdd();
   }
+
+  openEdit(user: UserDto) {
+    this.editUser = { id: user.id, name: user.name, email: user.email, role: user.role, status: user.status };
+    this.showEdit = true;
+  }
+  closeEdit() { this.showEdit = false; }
+  saveEdit() {
+    const { id, name, email, role, status } = this.editUser;
+    if (!name || !email) return;
+    this.users.update({ id, name, email, role, status });
+    this.closeEdit();
+  }
+
+  openDelete(user: UserDto) {
+    this.deleteUser = user;
+    this.showDelete = true;
+  }
+  closeDelete() { this.showDelete = false; this.deleteUser = null; }
+  confirmDelete() {
+    if (this.deleteUser) {
+      this.users.delete(this.deleteUser.id);
+      this.closeDelete();
+    }
+  }
+
   private resetNewUser() { this.newUser = { name: '', email: '', role: 'user', status: 'active' }; }
 }

@@ -56,12 +56,9 @@ export class UserService {
       next: (created) => {
         this._users.set([created, ...this._users()]);
       },
-      error: () => {
-        // demo: create locally
-        const id = Math.max(0, ...this._users().map(u => u.id)) + 1;
-        const now = new Date().toISOString();
-        const created: UserDto = { id, lastLogin: now, ...user } as UserDto;
-        this._users.set([created, ...this._users()]);
+      error: (err) => {
+        console.error('Failed to create user:', err);
+        this._error.set('Failed to create user');
       }
     });
   }
@@ -71,14 +68,14 @@ export class UserService {
     this._error.set(null);
     const url = `${environment.apiUrl}/admin/users`;
     this.http.get<UserDto[]>(url).subscribe({
-      next: (users) => { this._users.set(users); this._loading.set(false); },
-      error: () => {
-        // demo fallback with slight delay
-        setTimeout(() => {
-          this._users.set(this.generateDemoUsers());
-          this._loading.set(false);
-          this._error.set(null);
-        }, 800);
+      next: (users) => {
+        this._users.set(users);
+        this._loading.set(false);
+      },
+      error: (err) => {
+        console.error('Failed to load users:', err);
+        this._error.set('Failed to load users');
+        this._loading.set(false);
       }
     });
   }
@@ -91,11 +88,9 @@ export class UserService {
         const next = current.map(u => u.id === updated.id ? { ...u, ...updated } : u);
         this._users.set(next);
       },
-      error: () => {
-        // optimistic fallback: update local for demo
-        const current = this._users();
-        const next = current.map(u => u.id === user.id ? { ...u, ...user } as UserDto : u);
-        this._users.set(next);
+      error: (err) => {
+        console.error('Failed to update user:', err);
+        this._error.set('Failed to update user');
       }
     });
   }
@@ -106,33 +101,13 @@ export class UserService {
       next: () => {
         this._users.set(this._users().filter(u => u.id !== id));
       },
-      error: () => {
-        // demo: remove locally
-        this._users.set(this._users().filter(u => u.id !== id));
+      error: (err) => {
+        console.error('Failed to delete user:', err);
+        this._error.set('Failed to delete user');
       }
     });
   }
 
   setSearch(q: string) { this._search.set(q); this._page.set(1); }
   setPage(p: number) { const t = this.totalPages(); if (p>=1 && p<=t) this._page.set(p); }
-
-  private generateDemoUsers(): UserDto[] {
-    const roles: UserRole[] = ['admin','user','viewer'];
-    const statuses: UserStatus[] = ['active','disabled','pending'];
-    return Array.from({ length: 42 }).map((_, i) => {
-      const name = `User ${i+1}`;
-      const email = `user${i+1}@serverly.com`;
-      const role = roles[Math.floor(Math.random()*roles.length)];
-      const status = statuses[Math.floor(Math.random()*statuses.length)];
-      const last = new Date(Date.now() - Math.random()*14*24*60*60*1000);
-      return {
-        id: i+1,
-        name,
-        email,
-        role,
-        status,
-        lastLogin: last.toISOString(),
-      };
-    });
-  }
 }

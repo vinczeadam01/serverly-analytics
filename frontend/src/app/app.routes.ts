@@ -10,7 +10,7 @@ import { EmailComponent } from './features/email/components/email/email.componen
 import { EmailViewComponent } from './features/email/components/email-view/email-view.component';
 import { VpsComponent } from './features/vps/components/vps/vps.component';
 import { VpsViewComponent } from './features/vps/components/vps-view/vps-view.component';
-import { ProfileComponent } from './features/admin/components/profile/profile.component';
+import { ProfileComponent } from './features/profile/components/profile/profile.component';
 import { UsersComponent } from './features/admin/components/users/users.component';
 import { KafkaComponent } from './features/kafka/components/kafka/kafka.component';
 import { LayoutComponent } from './core/layout/components/layout/layout.component';
@@ -35,7 +35,7 @@ export const routes: Routes = [
       { path: 'vps', component: VpsComponent },
       { path: 'vps/:host', component: VpsViewComponent },
       { path: 'kafka', component: KafkaComponent },
-      { path: 'settings', component: ProfileComponent },
+      { path: 'profile', component: ProfileComponent },
       { path: 'users', component: UsersComponent },
     ]
   },

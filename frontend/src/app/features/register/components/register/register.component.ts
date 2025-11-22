@@ -14,7 +14,7 @@ import { RegisterRequest } from '../../../../core/auth/models/auth.models';
 })
 export class RegisterComponent {
   registerData: RegisterRequest = {
-    username: '',
+    name: '',
     email: '',
     password: ''
   };
